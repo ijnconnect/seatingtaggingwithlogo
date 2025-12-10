@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Seating Tag Generator (13.5cm x 7.5cm)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CORE STYLES --- */
+        body {
+            margin: 0; 
+            padding: 20px; 
+            font-family: 'Poppins', sans-serif;
+            background-color: #f7f7f7; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* --- INPUT FORM --- */
+        .input-form-area {
+            background-color: #e6f7ff;
+            padding: 15px 20px;
+            border-bottom: 2px solid #007bff;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 480px;
+            max-width: 95%;
+            border-radius: 8px;
+        }
+
+        .input-group { display: flex; flex-direction: column; }
+        .input-form-area label { font-weight: bold; display: block; margin-bottom: 3px; font-size: 10pt; color: #007bff;}
+        .input-form-area textarea { 
+            padding: 8px; border: 1px solid #ccc; border-radius: 4px; resize: none; 
+            height: 40px; width: 100%; box-sizing: border-box; 
+        }
+        .input-form-area input[type="file"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .person-section {
+            border: 1px solid #007bff;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #fff;
+        }
+        .person-section h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #007bff;
+            border-bottom: 1px dashed #e6f7ff;
+            padding-bottom: 5px;
+        }
+        
+        /* NEW: Logo preview in the input form */
+        #logo-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        #logo-preview {
+            max-width: 50px;
+            max-height: 50px;
+            border: 1px solid #ccc;
+            padding: 3px;
+            border-radius: 4px;
+            display: none; /* Hide until an image is loaded */
+        }
+
+
+        /* --- CARD DISPLAY AREA --- */
+        .card-display-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Space between the two cards in the preview */
+        }
+        
+        /* --- CARD STYLES --- */
+        .seating-card-container {
+            /* Exact size in centimeters: 13.5cm x 7.5cm */
+            width: 13.5cm; 
+            height: 7.5cm; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            position: relative;
+            overflow: hidden; 
+        }
+
+        /* The Image Border Layer - Uses the working hosted link */
+        .border-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; 
+            
+            /* YOUR BORDER IMAGE LINK */
+            background-image: url('Untitled design (10).png'); 
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+        }
+
+        /* Content Layer - Centered text now occupies the entire vertical space */
+        .card-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2; 
+            
+            display: flex;
+            flex-direction: column;
+            /* Center content vertically */
+            justify-content: center; 
+            align-items: center;
+            text-align: center;
+            
+            /* ADJUSTMENT: Adjusted vertical padding to make room for the logo */
+            padding: 0.5cm 1.2cm; 
+            box-sizing: border-box;
+        }
+        
+        /* NEW: Logo Display Styling */
+        .logo-display {
+            max-width: 3.5cm; /* Set a max width for the logo */
+            max-height: 2.0cm; /* Set a max height for the logo */
+            object-fit: contain;
+            margin-bottom: 0.2cm; /* Space below the logo */
+            display: none; /* Hidden by default until an image is loaded */
+        }
+
+
+        /* Name */
+        .name-display {
+            font-size: 16pt; 
+            font-weight: 700; 
+            text-transform: uppercase;
+            color: #1a1a1a;
+            line-height: 1.2;
+            margin-bottom: 0.1cm;
+            white-space: pre-wrap; 
+        }
+
+        /* Designation */
+        .designation-display {
+            font-size: 12pt; 
+            font-weight: 400;
+            color: #333333;
+            line-height: 1.2;
+            white-space: pre-wrap;
+        }
+
+        /* --- PRINT STYLES (MOST IMPORTANT FOR TWO-UP) --- */
+        @media print {
+            body { 
+                padding: 0; 
+                background-color: white;
+                /* Center the print block on the page */
+                align-items: flex-start; 
+            }
+            .input-form-area { display: none; }
+            button { display: none; }
+
+            /* Ensure the two cards stick together and print vertically */
+            .card-display-area {
+                display: block; /* Change flex back to block for consistent print flow */
+                margin: 0 auto;
+                width: 13.5cm; /* Only need the width of one card */
+                page-break-after: avoid; /* Avoid page break right after the container */
+                gap: 0;
+            }
+            .seating-card-container {
+                box-shadow: none; 
+                margin: 0 0 1cm 0; /* 1cm margin between cards for easy cutting */
+                break-after: avoid; /* Prevent page break between the two cards */
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="input-form-area">
+        <h2>Double Seating Tag Customizer ($13.5\text{cm} \times 7.5\text{cm}$)</h2>
+        
+        <div class="input-group">
+            <label for="logo-upload">Event/Company Logo (PNG/JPG):</label>
+            <input type="file" id="logo-upload" accept="image/png, image/jpeg" onchange="readLogoFile()">
+            <div id="logo-preview-container">
+                <img id="logo-preview" alt="Logo Preview">
+            </div>
+        </div>
+        <div class="person-section" id="person-1-group">
+            <h3>Card 1 Details</h3>
+            <div class="input-group">
+                <label for="person-1-name">Name (Card 1):</label>
+                <textarea id="person-1-name" oninput="updateCard(1)">TAN SRI DATO' SERI DR NOOR
+HISHAM ABDULLAH</textarea>
+            </div>
+            <div class="input-group">
+                <label for="person-1-designation">Title/Designation (Card 1):</label>
+                <textarea id="person-1-designation" oninput="updateCard(1)">Pengerusi,
+Institut Jantung Negara Sdn Bhd</textarea>
+            </div>
+        </div>
+
+        <div class="person-section" id="person-2-group">
+            <h3>Card 2 Details </h3>
+            <div class="input-group">
+                <label for="person-2-name">Name (Card 2):</label>
+                <textarea id="person-2-name" oninput="updateCard(2)">DATUK DR. MOHAMMAD
+AZMAN BIN AZIZI</textarea>
+            </div>
+            <div class="input-group">
+                <label for="person-2-designation">Title/Designation (Card 2):</label>
+                <textarea id="person-2-designation" oninput="updateCard(2)">Chief Executive Officer,
+IJN Holdings Sdn Bhd</textarea>
+            </div>
+        </div>
+        
+        <button onclick="printCard()" style="padding: 10px 25px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Print Two Seating Tags</button>
+    </div>
+    
+    <div class="card-display-area">
+        
+        <div class="seating-card-container" id="printable-card-1">
+            <div class="border-image"></div>
+            <div class="card-content">
+                <img class="logo-display" id="logo-display-1" src="" alt="Card Logo 1">
+                <div class="name-display" id="name-display-1"></div>
+                <div class="designation-display" id="designation-display-1"></div>
+            </div>
+        </div>
+
+        <div class="seating-card-container" id="printable-card-2">
+            <div class="border-image"></div>
+            <div class="card-content">
+                <img class="logo-display" id="logo-display-2" src="" alt="Card Logo 2">
+                <div class="name-display" id="name-display-2"></div>
+                <div class="designation-display" id="designation-display-2"></div>
+            </div>
+        </div>
+
+    </div>
+    
+    <script>
+        
+        let globalLogoDataUrl = ''; // Variable to hold the logo data URL
+
+        // Reads the uploaded logo file and updates the cards
+        function readLogoFile() {
+            const fileInput = document.getElementById('logo-upload');
+            const file = fileInput.files[0];
+            const logoPreview = document.getElementById('logo-preview');
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    globalLogoDataUrl = e.target.result;
+                    logoPreview.src = globalLogoDataUrl;
+                    logoPreview.style.display = 'block'; // Show input form preview
+                    updateLogoDisplays(globalLogoDataUrl); // Update card displays
+                };
+                reader.readAsDataURL(file);
+            } else {
+                globalLogoDataUrl = '';
+                logoPreview.src = '';
+                logoPreview.style.display = 'none'; // Hide input form preview
+                updateLogoDisplays(''); // Clear card displays
+            }
+        }
+        
+        // Function to update the logo on both display cards
+        function updateLogoDisplays(dataUrl) {
+            const logo1 = document.getElementById('logo-display-1');
+            const logo2 = document.getElementById('logo-display-2');
+            
+            logo1.src = dataUrl;
+            logo2.src = dataUrl;
+            
+            // Show/Hide logo based on whether a data URL exists
+            logo1.style.display = dataUrl ? 'block' : 'none';
+            logo2.style.display = dataUrl ? 'block' : 'none';
+        }
+
+
+        // Updates the text for a specific card (1 or 2)
+        function updateCard(personNumber) {
+            const name = document.getElementById(`person-${personNumber}-name`).value.toUpperCase();
+            const designation = document.getElementById(`person-${personNumber}-designation`).value;
+            
+            document.getElementById(`name-display-${personNumber}`).innerText = name;
+            document.getElementById(`designation-display-${personNumber}`).innerText = designation;
+            
+            // The logo update is handled by updateLogoDisplays, but we ensure initial logo is set if already uploaded
+            if (globalLogoDataUrl) {
+                updateLogoDisplays(globalLogoDataUrl);
+            }
+        }
+
+        function printCard() {
+            window.print();
+        }
+
+        // Initial update on load for both cards
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCard(1);
+            updateCard(2);
+        });
+    </script>
+
+</body>
+</html>
